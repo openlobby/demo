@@ -1,0 +1,46 @@
+version: "2"
+
+services:
+    openlobby-es:
+        image: openlobby/openlobby-es-czech:latest
+        environment:
+            - discovery.type=single-node
+            - cluster.name=openlobby
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+        mem_limit: 1g
+        ports:
+            - "9200:9200"
+        restart: always
+        volumes:
+            - es-data:/usr/share/elasticsearch/data
+
+    openlobby-server:
+        image: openlobby/openlobby-server:latest
+        ports:
+            - "8010:8010"
+        restart: always
+        depends_on:
+            - openlobby-es
+        environment:
+            - ELASTICSEARCH_DSN=http://openlobby-es:9200
+            - SECRET_KEY=unsecure-demo-secret-key
+
+    openlobby-app:
+        image: openlobby/openlobby-app:latest
+        ports:
+            - "8020:8020"
+        restart: always
+        depends_on:
+            - openlobby-server
+        environment:
+            - OPENLOBBY_SERVER_DSN=http://openlobby-server:8010
+            - SECRET_KEY=another-demo-secret-key
+
+volumes:
+    es-data:
+        driver: local
