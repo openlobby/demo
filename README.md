@@ -14,11 +14,12 @@ Clone this repository and then you can:
 - Stop and/or remove all data: `make destroy`
 
 It runs:
+ - PostgreSQL on port `5432`
  - Elasticsearch on port `9200`
  - Open Lobby Server on port `8010` - GraphQL API endpoint and GraphiQL
    interface are at `http://localhost:8010/graphql`
  - Open Lobby App on port `8020` - web application is at `http://localhost:8020`
 
 You may notice some errors and crashes if you access it immediately because
-Elasticsearch starts slowly. But it should recover and eventually it will be all
-running fine.
+PostgreSQL and Elasticsearch starts slowly. But it should recover and eventually
+it will be all running fine.
